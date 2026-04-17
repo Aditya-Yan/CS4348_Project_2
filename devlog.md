@@ -87,3 +87,24 @@ It is really important that the placement of the acquire and releases because I 
 ### Session Reflection
 
 Finished adding the manager and the safe and the project is now beginning to heavily resemble the final output. As seen in the log, the teller is now logging when they are going to the manager, gets their permission, or goes to the safe. The tellers are waiting properely if the manager is occupied or the safe is taken by two other tellers. As mentioned before, I had some issues with placement of the semaphores as forgetting made the whole program go haywire. 
+
+## 04-17-26 01:17 PM
+
+### Session 5
+
+Adding one of the final pieces of the project, the behavior of the bank and the door restriction for customers
+
+### Plan
+
+- Make sure that customers can't enter bank before it is open/tellers are ready
+- Make an event where bank opens so customers enter
+- Add a semaphore of value 2 for the door similar to the safe
+- Make customers use the door when entering and leaving (I am assuming the door limit applies when leaving too)
+
+### Mid-Session thought
+
+I need to create a sequence of events because right now the Customer threads are created independently of the Teller threads. I need to create a sequence that checks if all three tellers are ready, then does the bank open event. From there, everything is normal.
+
+### Session Reflection
+
+Finished the last two missing pieces. I used an event as I mentioned so that the customer threads block until the tellers are ready, which then does the bank open event. Then I added the door semaphore with a value two so only two customers can be using the door at once. This was not as bad as it was very similar to the safe behavior. I used it for both entering and leaving the bank as I mentioned above. Everything is working as it should, all that is left to do is to scale and make sure shut down happens well. 
