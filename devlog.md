@@ -30,3 +30,25 @@ I am going to start off with a very small interaction: one teller and three cust
 ### Session Reflection
 
 I managed to succesfully implement the introduction so that it looks like the sample output (on a much smaller scale). The customer thread logs that it is going to the bank, entering, getting in line, selects the teller, and introduces itself. The teller waits on semaphores and the logs that it is serving the customer. To do this I used global shared arrays and semaphore lists. This section was a little more challenging than I thought it would be. I initially had threads printing in inconsistent orders because I messed up how I was using my semaphores.
+
+## 04-17-26 12:14 PM
+
+### Session 2
+
+Now that the initial interaction is working, I want to expand to a three-teller setup and add the ready-teller selection mechanism so that customers can choose from whichever teller is free.
+
+### Plan
+
+- Increase to three teller threads
+- Add a shared queue of ready tellers
+- Protect the queue with a lock
+- Let customers wait until a teller is available before selecting one
+
+### Mid-Session Thought
+
+I am realizing how important semaphores are when using multiple threads. I initially just used a normal queue of available tellers, but without protection two customers went for the same teller. This created a race condition.
+
+### Session Reflection
+
+I finished making the shared scheudling structure. I made a ready-telller queue and once a teller becomes available, it puts its ID into the queue and releases a semaphore counting the number of ready tellers. Using semaphores here is key as I found out because otherwise two customers went for the same teller. Each customer waits until a teller is available, pops a teller ID, and continues as normal.
+
