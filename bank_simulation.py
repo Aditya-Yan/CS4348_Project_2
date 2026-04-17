@@ -4,7 +4,7 @@ import time
 from collections import deque
 
 NUM_TELLERS = 3
-NUM_CUSTOMERS = 10
+NUM_CUSTOMERS = 50
 
 printLock = threading.Semaphore(1)
 lineLock = threading.Semaphore(1)
@@ -43,7 +43,6 @@ def teller_ready(teller_id):
     lineLock.release()
     readyTellerCount.release()
 
-
 def teller_thread(teller_id):
     log_line("Teller", teller_id, msg="ready to serve")
     countLock.acquire()
@@ -52,7 +51,6 @@ def teller_thread(teller_id):
     countLock.release()
     if teller_thread.ready_count == NUM_TELLERS:
         bankOpen.set()
-
     while True:
         teller_ready(teller_id)
         log_line("Teller", teller_id, msg="waiting for a customer")
@@ -61,11 +59,11 @@ def teller_thread(teller_id):
             return
         customerIntroduced[teller_id].acquire()
         customer_id = customerForTeller[teller_id]
-        transaction = transactionForTeller[teller_id]
         log_line("Teller", teller_id, "Customer", customer_id, "serving a customer")
         log_line("Teller", teller_id, "Customer", customer_id, "asks for transaction")
         askTransaction[teller_id].release()
         transactionGiven[teller_id].acquire()
+        transaction = transactionForTeller[teller_id]
         log_line("Teller", teller_id, "Customer", customer_id, f"handling {transaction} transaction")
         if transaction == "withdrawal":
             log_line("Teller", teller_id, "Customer", customer_id, "going to the manager")
@@ -119,23 +117,29 @@ def customer_thread(customer_id):
     door.release()
 
 
-tellerThreads = []
-customerThreads = []
+def main():
+    tellerThreads = []
+    customerThreads = []
 
-for i in range(NUM_TELLERS):
-    tellerThreads.append(threading.Thread(target=teller_thread, args=(i,)))
-    tellerThreads[i].start()
+    for i in range(NUM_TELLERS):
+        tellerThreads.append(threading.Thread(target=teller_thread, args=(i,)))
+        tellerThreads[i].start()
 
-for i in range(NUM_CUSTOMERS):
-    customerThreads.append(threading.Thread(target=customer_thread, args=(i,)))
-    customerThreads[i].start()
+    for i in range(NUM_CUSTOMERS):
+        customerThreads.append(threading.Thread(target=customer_thread, args=(i,)))
+        customerThreads[i].start()
 
-for i in range(NUM_CUSTOMERS):
-    customerThreads[i].join()
+    for i in range(NUM_CUSTOMERS):
+        customerThreads[i].join()
 
-for i in range(NUM_TELLERS):
-    shutdownTeller[i] = True
-    customerAssigned[i].release()
+    for i in range(NUM_TELLERS):
+        shutdownTeller[i] = True
+        customerAssigned[i].release()
 
-for i in range(NUM_TELLERS):
-    tellerThreads[i].join()
+    for i in range(NUM_TELLERS):
+        tellerThreads[i].join()
+
+
+
+if __name__ == "__main__":
+    main()

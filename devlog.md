@@ -108,3 +108,19 @@ I need to create a sequence of events because right now the Customer threads are
 ### Session Reflection
 
 Finished the last two missing pieces. I used an event as I mentioned so that the customer threads block until the tellers are ready, which then does the bank open event. Then I added the door semaphore with a value two so only two customers can be using the door at once. This was not as bad as it was very similar to the safe behavior. I used it for both entering and leaving the bank as I mentioned above. Everything is working as it should, all that is left to do is to scale and make sure shut down happens well. 
+
+
+## 04-17-26 01:30 PM
+
+### Session 6
+
+As mentioned above, just scaling and making sure that shutdown happens well.
+
+### Plan
+
+- Scale to 50 customer threads
+- Make sure shutdown logic is good so nothing is hanging
+
+### Session Reflection
+
+I just increased the simulation to have 50 customers. Also checked that each teller is released after all customer threads are done, so they are not stuck forever. I also realized that I had it so that the teller currently reads the customer’s transaction before the customer officially signals that it has been given, so I should move that read to after the transaction semaphore wait, just a small fix. From what I have checked, the output format matches what is given and I have fulfilled the requirements. Also I just realized I forgot to add my main function this entire time so I just added that really quickly.
