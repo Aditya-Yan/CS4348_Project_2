@@ -31,7 +31,7 @@ I am going to start off with a very small interaction: one teller and three cust
 
 I managed to succesfully implement the introduction so that it looks like the sample output (on a much smaller scale). The customer thread logs that it is going to the bank, entering, getting in line, selects the teller, and introduces itself. The teller waits on semaphores and the logs that it is serving the customer. To do this I used global shared arrays and semaphore lists. This section was a little more challenging than I thought it would be. I initially had threads printing in inconsistent orders because I messed up how I was using my semaphores.
 
-## 04-17-26 12:14 PM
+## 04-17-26 12:14 AM
 
 ### Session 2
 
@@ -52,7 +52,7 @@ I am realizing how important semaphores are when using multiple threads. I initi
 
 I finished making the shared scheudling structure. I made a ready-telller queue and once a teller becomes available, it puts its ID into the queue and releases a semaphore counting the number of ready tellers. Using semaphores here is key as I found out because otherwise two customers went for the same teller. Each customer waits until a teller is available, pops a teller ID, and continues as normal.
 
-## 04-17-26 12:40 PM
+## 04-17-26 12:40 AM
 
 ### Session 3
 
@@ -69,7 +69,7 @@ Now that the customer and teller meet correctly and do basic interactions correc
 
 I added the new semaphores so that the teller could ask for the transaction and wait on the customer to respond so the output is ordered correctly. I initially faced some challenges with this section as I was trying to just use one semaphore for the entire interactoin, but then I realized there were several synchronizatoin points. As such, I realized one was not enough. I just made a placeholder "transaction" for now as I mentioned before in the plan to simulation withdrawing or depositing. Once this is done, the customer is notified. I also scaled the project up a little bit more to 10 customer threads just to see if it would still work and it does. I believe with this I have the backbone of the project done, now I just need to implement the finer details.
 
-## 04-17-26 01:03 PM
+## 04-17-26 01:03 AM
 
 ### Session 4
 
@@ -88,7 +88,7 @@ It is really important that the placement of the acquire and releases because I 
 
 Finished adding the manager and the safe and the project is now beginning to heavily resemble the final output. As seen in the log, the teller is now logging when they are going to the manager, gets their permission, or goes to the safe. The tellers are waiting properely if the manager is occupied or the safe is taken by two other tellers. As mentioned before, I had some issues with placement of the semaphores as forgetting made the whole program go haywire. 
 
-## 04-17-26 01:17 PM
+## 04-17-26 01:17 AM
 
 ### Session 5
 
@@ -110,7 +110,7 @@ I need to create a sequence of events because right now the Customer threads are
 Finished the last two missing pieces. I used an event as I mentioned so that the customer threads block until the tellers are ready, which then does the bank open event. Then I added the door semaphore with a value two so only two customers can be using the door at once. This was not as bad as it was very similar to the safe behavior. I used it for both entering and leaving the bank as I mentioned above. Everything is working as it should, all that is left to do is to scale and make sure shut down happens well. 
 
 
-## 04-17-26 01:30 PM
+## 04-17-26 01:30 AM
 
 ### Session 6
 
