@@ -130,3 +130,9 @@ I just increased the simulation to have 50 customers. Also checked that each tel
 ### Session 7
 
 Just doing a final check on everything and it looks good to me! Output matches! Will do one last check tomorrow before turning in.
+
+## 04-17-26 03:10 AM
+
+### Session 8
+
+Decided to check one more time before sleeping and realized that "ready to serve" is only printed once when tellers are first initialized and that the exit messages are not logged. Fixed this by adding the logging. Now output matches completely. Will still do a final check tomorrow.

@@ -44,7 +44,6 @@ def teller_ready(teller_id):
     readyTellerCount.release()
 
 def teller_thread(teller_id):
-    log_line("Teller", teller_id, msg="ready to serve")
     countLock.acquire()
     current_ready = getattr(teller_thread, "ready_count", 0) + 1
     teller_thread.ready_count = current_ready
@@ -52,10 +51,12 @@ def teller_thread(teller_id):
     if teller_thread.ready_count == NUM_TELLERS:
         bankOpen.set()
     while True:
+        log_line("Teller", teller_id, msg="ready to serve")
         teller_ready(teller_id)
         log_line("Teller", teller_id, msg="waiting for a customer")
         customerAssigned[teller_id].acquire()
         if shutdownTeller[teller_id]:
+            log_line("Teller", teller_id, msg="leaving for the day")
             return
         customerIntroduced[teller_id].acquire()
         customer_id = customerForTeller[teller_id]
@@ -138,6 +139,7 @@ def main():
 
     for i in range(NUM_TELLERS):
         tellerThreads[i].join()
+    print("The bank closes for the day.")
 
 
 
