@@ -124,3 +124,9 @@ As mentioned above, just scaling and making sure that shutdown happens well.
 ### Session Reflection
 
 I just increased the simulation to have 50 customers. Also checked that each teller is released after all customer threads are done, so they are not stuck forever. I also realized that I had it so that the teller currently reads the customer’s transaction before the customer officially signals that it has been given, so I should move that read to after the transaction semaphore wait, just a small fix. From what I have checked, the output format matches what is given and I have fulfilled the requirements. Also I just realized I forgot to add my main function this entire time so I just added that really quickly.
+
+## 04-17-26 02:28 AM
+
+### Session 7
+
+Just doing a final check on everything and it looks good to me! Output matches! Will do one last check tomorrow before turning in.
