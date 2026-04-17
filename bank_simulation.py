@@ -9,6 +9,8 @@ NUM_CUSTOMERS = 10
 printLock = threading.Semaphore(1)
 lineLock = threading.Semaphore(1)
 readyTellerCount = threading.Semaphore(0)
+manager = threading.Semaphore(1)
+safe = threading.Semaphore(2)
 readyTellers = deque()
 customerForTeller = [None] * NUM_TELLERS
 transactionForTeller = [None] * NUM_TELLERS
@@ -48,13 +50,25 @@ def teller_thread(teller_id):
             return
         customerIntroduced[teller_id].acquire()
         customer_id = customerForTeller[teller_id]
+        transaction = transactionForTeller[teller_id]
         log_line("Teller", teller_id, "Customer", customer_id, "serving a customer")
         log_line("Teller", teller_id, "Customer", customer_id, "asks for transaction")
         askTransaction[teller_id].release()
         transactionGiven[teller_id].acquire()
-        transaction = transactionForTeller[teller_id]
         log_line("Teller", teller_id, "Customer", customer_id, f"handling {transaction} transaction")
-        time.sleep(random.randint(10, 25) / 1000.0)
+        if transaction == "withdrawal":
+            log_line("Teller", teller_id, "Customer", customer_id, "going to the manager")
+            manager.acquire()
+            log_line("Teller", teller_id, "Customer", customer_id, "getting manager's permission")
+            time.sleep(random.randint(5, 30) / 1000.0)
+            log_line("Teller", teller_id, "Customer", customer_id, "got manager's permission")
+            manager.release()
+        log_line("Teller", teller_id, "Customer", customer_id, "going to safe")
+        safe.acquire()
+        log_line("Teller", teller_id, "Customer", customer_id, "enter safe")
+        time.sleep(random.randint(10, 40) / 1000.0)
+        log_line("Teller", teller_id, "Customer", customer_id, "leaving safe")
+        safe.release()
         log_line("Teller", teller_id, "Customer", customer_id, f"finishes {transaction} transaction.")
         transactionDone[teller_id].release()
         log_line("Teller", teller_id, "Customer", customer_id, "wait for customer to leave.")

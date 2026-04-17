@@ -68,3 +68,22 @@ Now that the customer and teller meet correctly and do basic interactions correc
 ### Session Reflection
 
 I added the new semaphores so that the teller could ask for the transaction and wait on the customer to respond so the output is ordered correctly. I initially faced some challenges with this section as I was trying to just use one semaphore for the entire interactoin, but then I realized there were several synchronizatoin points. As such, I realized one was not enough. I just made a placeholder "transaction" for now as I mentioned before in the plan to simulation withdrawing or depositing. Once this is done, the customer is notified. I also scaled the project up a little bit more to 10 customer threads just to see if it would still work and it does. I believe with this I have the backbone of the project done, now I just need to implement the finer details.
+
+## 04-17-26 01:03 PM
+
+### Session 4
+
+Now that I have completed the backbone of this project with the placeholder transaction interactions being done, I need to add the behind the scenes details. For this, I need to add the two major shared resources being the manager and the safe.
+
+### Plan
+
+- Protect the manager with a semaphore value of 1
+- Protect the safe with a semaphore value of 2
+
+### Mid-Session thought
+
+It is really important that the placement of the acquire and releases because I was forgetting to place some here and there and it would freeze the progress since it caused multiple tellers to be blocked. It is also amazing to see how powerful of a tool semaphores are as I was just playing around with the initial semaphore values to see how it would affect the program.
+
+### Session Reflection
+
+Finished adding the manager and the safe and the project is now beginning to heavily resemble the final output. As seen in the log, the teller is now logging when they are going to the manager, gets their permission, or goes to the safe. The tellers are waiting properely if the manager is occupied or the safe is taken by two other tellers. As mentioned before, I had some issues with placement of the semaphores as forgetting made the whole program go haywire. 
