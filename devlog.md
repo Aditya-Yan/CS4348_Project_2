@@ -52,3 +52,19 @@ I am realizing how important semaphores are when using multiple threads. I initi
 
 I finished making the shared scheudling structure. I made a ready-telller queue and once a teller becomes available, it puts its ID into the queue and releases a semaphore counting the number of ready tellers. Using semaphores here is key as I found out because otherwise two customers went for the same teller. Each customer waits until a teller is available, pops a teller ID, and continues as normal.
 
+## 04-17-26 12:40 PM
+
+### Session 3
+
+Now that the customer and teller meet correctly and do basic interactions correctly, I added the transaction exchange. 
+
+### Plan
+
+- Let each customer choose deposit or withdrawal randomly
+- Have tellers ask for the transaction
+- Have customers respond with the transaction
+- Make customers wait until the teller says the transaction is finished
+
+### Session Reflection
+
+I added the new semaphores so that the teller could ask for the transaction and wait on the customer to respond so the output is ordered correctly. I initially faced some challenges with this section as I was trying to just use one semaphore for the entire interactoin, but then I realized there were several synchronizatoin points. As such, I realized one was not enough. I just made a placeholder "transaction" for now as I mentioned before in the plan to simulation withdrawing or depositing. Once this is done, the customer is notified. I also scaled the project up a little bit more to 10 customer threads just to see if it would still work and it does. I believe with this I have the backbone of the project done, now I just need to implement the finer details.
