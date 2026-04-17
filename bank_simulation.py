@@ -3,6 +3,8 @@ import random
 import time
 from collections import deque
 
+logFile = open("bank_output.txt", "w")
+
 NUM_TELLERS = 3
 NUM_CUSTOMERS = 50
 
@@ -30,10 +32,15 @@ customerLeft = [threading.Semaphore(0) for _ in range(NUM_TELLERS)]
 
 def log_line(thread_type, thread_id, other_type=None, other_id=None, msg=""):
     printLock.acquire()
+
     if other_type is None:
-        print(f"{thread_type} {thread_id} []: {msg}")
+        line = f"{thread_type} {thread_id} []: {msg}"
     else:
-        print(f"{thread_type} {thread_id} [{other_type} {other_id}]: {msg}")
+        line = f"{thread_type} {thread_id} [{other_type} {other_id}]: {msg}"
+
+    print(line)
+    logFile.write(line + "\n")
+
     printLock.release()
 
 

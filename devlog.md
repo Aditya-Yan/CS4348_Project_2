@@ -136,3 +136,7 @@ Just doing a final check on everything and it looks good to me! Output matches! 
 ### Session 8
 
 Decided to check one more time before sleeping and realized that "ready to serve" is only printed once when tellers are first initialized and that the exit messages are not logged. Fixed this by adding the logging. Now output matches completely. Will still do a final check tomorrow.
+
+### Session 8 Continued
+
+Decided to also write all the text to a .txt for easier grading and comparison
